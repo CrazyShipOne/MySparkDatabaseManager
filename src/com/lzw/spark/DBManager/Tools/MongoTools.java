@@ -19,12 +19,13 @@ public class MongoTools {
     private static MongoClient mongoClient ;
     private static Logger log = LoggerFactory.getLogger(MongoTools.class);
 
+
     /**
      * 获取一个数据库
      * @param dbName  数据库名称
      * @return
      */
-    public static DB getMongoDB(String dbName)
+    public static synchronized DB getMongoDB(String dbName)
     {
         if(mongoClient == null)
         {
@@ -52,7 +53,7 @@ public class MongoTools {
      * @param pwd   密码
      * @return
      */
-    public static DB getAuthenticatedMongoDB(String dbName,String user,String pwd)
+    public static synchronized DB getAuthenticatedMongoDB(String dbName,String user,String pwd)
     {
         if(mongoClient == null)
         {
@@ -76,7 +77,7 @@ public class MongoTools {
         else
         {
             DB db = mongoClient.getDB(dbName);
-            if(db.authenticate(user, pwd.toCharArray())) {
+            if(!db.isAuthenticated() && db.authenticate(user, pwd.toCharArray())) {
                 return db;
             }
             else
