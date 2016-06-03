@@ -2,6 +2,7 @@ package com.lzw.spark.DBManager.Service;
 
 
 import com.google.gson.Gson;
+import com.lzw.spark.DBManager.Tools.MongoTools;
 import com.lzw.spark.DBManager.pojo.Todo;
 import com.mongodb.*;
 import org.bson.types.ObjectId;
@@ -17,9 +18,9 @@ public class TodoService {
     private DB db;
     private DBCollection collection;
 
-    public TodoService(DB db)
+    public TodoService()
     {
-        this.db = db;
+        this.db = MongoTools.getAuthenticatedMongoDB("todo","test","test");
         this.collection = db.getCollection("todos");
     }
 
